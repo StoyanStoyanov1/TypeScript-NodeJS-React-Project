@@ -1,11 +1,13 @@
-import "./App.css";
+import React, {FC, ReactElement} from 'react';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import {customTheme} from "./theme/customTheme";
 
-import React from "react";
-import logo from "./logo.svg";
-
-function App() {
+const App:FC = () => {
   return (
-   <h1>Hello World</h1>
+    <ThemeProvider theme={customTheme}>
+      <CssBaseline />
+          <h1>Hello World</h1>
+    </ThemeProvider>
   );
 }
 
