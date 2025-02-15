@@ -19,6 +19,6 @@ export const Sidebar: FC = (): ReactElement => {
           alignItems: 'center',
         }}
       >
-        <Profile />
+        <Profile name="Stenly" />
       </Grid>)
 }
