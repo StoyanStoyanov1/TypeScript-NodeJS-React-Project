@@ -1,8 +1,8 @@
 import React, { FC, ReactElement } from 'react';
 
 import { Grid } from '@mui/material';
-import { TaskArea } from '../../components/taskArea/taskArea';
 import { Sidebar } from '../../components/sidebar/sidebar';
+import { TaskArea } from '../../components/taskArea/taskArea';
 
 export const Dashboard: FC = (): ReactElement => {
   return (
