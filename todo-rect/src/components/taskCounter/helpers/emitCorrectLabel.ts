@@ -1,15 +1,15 @@
 import { Status } from '../../createTaskForm/enums/Status';
 import { TaskCounterStatusType } from '../interfaces/ITaskCounter';
 
-export const emitCorrectBorderColor = (
+export const emitCorrectLabel = (
   status: TaskCounterStatusType,
 ): string => {
   switch (status) {
     case Status.todo:
-      return 'error.light';
+      return `Todo's`;
     case Status.inProgress:
-      return 'warning.light';
+      return 'In Progress';
     case Status.completed:
-      return 'success.light';
+      return 'Completed';
   }
 };
