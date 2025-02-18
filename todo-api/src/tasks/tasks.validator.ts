@@ -57,5 +57,4 @@ export const updateValidator = [
     .withMessage(
       'Status can only be todo,inProgress or completed',
     ),
-  ,
 ];
