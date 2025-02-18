@@ -5,7 +5,7 @@ import { Task } from './src/tasks/tasks.entity';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { tasksRouter } from './src/tasks/tasts.router';
+import { tasksRouter } from './src/tasks/tasks.router';
 
 // Instantiate express app
 const app: Express = express();
