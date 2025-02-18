@@ -1,10 +1,11 @@
-import express, {Express, Request, Response} from "express";
+import express, { Express } from 'express';
 
-import dotenv from "dotenv";
-import { DataSource } from "typeorm";
-import cors from 'cors';
-import bodyParser from "body-parser";
+import { DataSource } from 'typeorm';
 import { Task } from './src/tasks/tasks.entity';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { tasksRouter } from './src/tasks/tasts.router';
 
 // Instantiate express app
 const app: Express = express();
@@ -14,34 +15,34 @@ dotenv.config();
 app.use(bodyParser.json());
 
 // Use CORS install types as well
-
 app.use(cors());
 
 // Create Database Connection
 export const AppDataSource = new DataSource({
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DB,
-    entities: [Task],
-    synchronize: true,
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB,
+  entities: [Task],
+  synchronize: true,
 });
 
 // Define sever port
 const port = process.env.PORT;
 
-// Create a default route.
-app.get('/', (req: Request, res: Response)=>{
-    res.send('Exress + TypeScript Server')
-});
-
-AppDataSource.initialize().then(() => {
+AppDataSource.initialize()
+  .then(() => {
+    // Start listenting to the requests on the defined port
     app.listen(port);
-    console.log('Data Source has been initialized');
-}).catch((err) => {
-    console.error('Error during Data Source initialization')
-});
+    console.log('Data Source has been initialized!');
+  })
+  .catch((err) => {
+    console.error(
+      'Error during Data Source initialization',
+      err,
+    );
+  });
 
-// Start listenting to the requests on the defined port
+app.use('/', tasksRouter);
