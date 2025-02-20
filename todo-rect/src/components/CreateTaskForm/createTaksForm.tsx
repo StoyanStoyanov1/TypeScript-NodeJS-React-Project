@@ -8,6 +8,7 @@ import {
     Alert,
     AlertTitle,
 } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 
 import { TaskTitleField } from "./_taskTitleField";
 import { TaskDescriptionField } from "./_taskDescriptionField";
@@ -16,6 +17,8 @@ import { TaskSelectField } from "./_taskSelectField";
 import { Status } from './enums/Status';
 import { Priority } from "./enums/Prioritiy";
 import dayjs from "dayjs";
+import { sendApiRequest } from "../../helpers/sendApiRequest";
+import { ICreateTask } from "../taskArea/interfaces/ICreateTask";
 
 
 export const CreateTaskForm: FC = (): ReactElement => {
@@ -28,6 +31,32 @@ export const CreateTaskForm: FC = (): ReactElement => {
     const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs);
     const [status, setStatus] = useState<string>(Status.todo);
     const [priority, setPriority] = useState<string>(Priority.normal);
+
+    const createTaskMutation = useMutation({
+        mutationFn: async (data: ICreateTask) => {
+            return sendApiRequest<ICreateTask>(
+                'http://localhost:3200/tasks',
+                'POST',
+                data
+            );
+        }
+    });
+    
+    function createTaskHandler() {
+        if (!title || !date || !description) {
+            return;
+        }
+
+        const task: ICreateTask = {
+            title,
+            description,
+            date: date.toString(),
+            status,
+            priority,
+        };
+        createTaskMutation.mutate(task);
+    }
+
     return (
         <Box
             display="flex"
@@ -99,6 +128,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
                 </Stack>
                 <LinearProgress />
                 <Button
+                onClick={createTaskHandler}
                 variant="contained"
                 size="large"
                 fullWidth
