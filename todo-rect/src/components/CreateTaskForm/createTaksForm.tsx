@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useState, useEffect } from "react";
 import {
     Box, 
     Typography, 
@@ -31,6 +31,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
     const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs);
     const [status, setStatus] = useState<string>(Status.todo);
     const [priority, setPriority] = useState<string>(Priority.normal);
+    const [showSucces, setShowSucces] = useState<boolean>(false);
 
     const createTaskMutation = useMutation({
         mutationFn: async (data: ICreateTask) => {
@@ -57,6 +58,21 @@ export const CreateTaskForm: FC = (): ReactElement => {
         createTaskMutation.mutate(task);
     }
 
+    useEffect(() => {
+        if (createTaskMutation.isSuccess) {
+            setShowSucces(true);
+        }
+
+        const successTimeout = setTimeout(() => {
+            setShowSucces(false);
+        }, 7000);
+
+        return () => {
+            clearTimeout(successTimeout);
+        }
+
+    }, [createTaskMutation.isSuccess])
+
     return (
         <Box
             display="flex"
@@ -66,6 +82,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
             px={4}
             my={6}
         >
+            {showSucces &&
             <Alert
             severity="success"
             sx={{width: '100%', marginBottom: '16px'}}
@@ -73,20 +90,25 @@ export const CreateTaskForm: FC = (): ReactElement => {
                 <AlertTitle>Success</AlertTitle>
                 The task has been created successfully
             </Alert>
+            }
             <Typography mb={2} component="h2" variant="h6">Create A Task</Typography>
             <Stack sx={{ width: '100%' }} spacing={2}>
                 <TaskTitleField 
                 onChange={(e) => setTitle(e.target.value)}
+                disabled={createTaskMutation.isPending}
                 />
                 <TaskDescriptionField 
-                onChange={(e) => {setDescription(e.target.value)}}    
+                onChange={(e) => {setDescription(e.target.value)}}
+                disabled={createTaskMutation.isPending}    
                 />
                 <TaskDateField 
                 value={date}
                 onChange={(date) => setDate(date)}
+                disabled={createTaskMutation.isPending}
                 />
                 <Stack sx={{ width: '100%'}} spacing={2} direction="row">
                     <TaskSelectField 
+                        disabled={createTaskMutation.isPending}
                         label="Status"
                         name="Status"
                         value={status}
@@ -103,6 +125,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
                         ]}
                     />
                     <TaskSelectField 
+                        disabled={createTaskMutation.isPending}
                         label="Priority"
                         name="priority"
                         value={priority} 
@@ -126,8 +149,15 @@ export const CreateTaskForm: FC = (): ReactElement => {
                     />
 
                 </Stack>
-                <LinearProgress />
+                {createTaskMutation.isPending && <LinearProgress />}
                 <Button
+                disabled={
+                    !title || 
+                    !description ||
+                    !date ||
+                    !status ||
+                    !priority
+                }
                 onClick={createTaskHandler}
                 variant="contained"
                 size="large"
