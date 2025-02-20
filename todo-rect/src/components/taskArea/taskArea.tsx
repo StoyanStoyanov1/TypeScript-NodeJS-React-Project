@@ -1,4 +1,10 @@
-import { Box, Grid } from '@mui/material';
+import { 
+  Box, 
+  Grid, 
+  Alert, 
+  LinearProgress,
+} 
+  from '@mui/material';
 import React, { FC, ReactElement } from 'react';
 
 import { Task } from '../task/task';
@@ -52,10 +58,21 @@ export const TaskArea: FC = (): ReactElement => {
           flexDirection="column"
           xs={10}
           md={8}
-        >
-          <Task />
-          <Task />
-          <Task />
+        > 
+        {error && 
+          <Alert severity="error">
+            There was an error fetching your tasks
+          </Alert>
+        }
+
+        {!error && Array.isArray(data) && data.length === 0 && 
+          <Alert severity="warning">
+            You do not have any tasks created yet. Start by creating come tasks
+          </Alert>
+        }
+          <Task id="123"/>
+          <Task id="123"/>
+          <Task id="123"/>
         </Grid>
       </Grid>
     </Grid>

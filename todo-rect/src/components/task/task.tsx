@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react';
 
 import { Box } from '@mui/material';
 import { ITask } from './interfaces/ITask';
-import { Priority } from '../createTaskForm/enums/Prioritiy';
+import { Priority } from '../createTaskForm/enums/Prioritiy'; 
 import PropTypes from 'prop-types';
 import { Status } from '../createTaskForm/enums/Status';
 import { TaskDescription } from './_taskDescription';
@@ -20,6 +20,7 @@ export const Task: FC<ITask> = (props): ReactElement => {
     status = Status.completed,
     onStatusChange = (e) => console.log(e),
     onClick = (e) => console.log(e),
+    id,
   } = props;
 
   return (
@@ -43,6 +44,8 @@ export const Task: FC<ITask> = (props): ReactElement => {
       <TaskFooter
         onClick={onClick}
         onStatusChange={onStatusChange}
+        id={id}
+        status={status}
       />
     </Box>
   );
