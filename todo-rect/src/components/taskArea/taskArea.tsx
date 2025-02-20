@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import { sendApiRequest } from '../../helpers/sendApiRequest';
 import { ITaskApi } from './interfaces/ITaskApi';
+import { Status } from '../createTaskForm/enums/Status';
 
 export const TaskArea: FC = (): ReactElement => {
 
@@ -59,6 +60,7 @@ export const TaskArea: FC = (): ReactElement => {
           xs={10}
           md={8}
         > 
+        <>
         {error && 
           <Alert severity="error">
             There was an error fetching your tasks
@@ -70,9 +72,11 @@ export const TaskArea: FC = (): ReactElement => {
             You do not have any tasks created yet. Start by creating come tasks
           </Alert>
         }
+          
           <Task id="123"/>
           <Task id="123"/>
           <Task id="123"/>
+        </>
         </Grid>
       </Grid>
     </Grid>
