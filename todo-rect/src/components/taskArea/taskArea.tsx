@@ -5,7 +5,7 @@ import {
   LinearProgress,
 } 
   from '@mui/material';
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useContext, useEffect } from 'react';
 import { Task } from '../task/task';
 import { TaskCounter } from '../taskCounter/taskCounter';
 import { format } from 'date-fns';
@@ -15,8 +15,12 @@ import { ITaskApi } from './interfaces/ITaskApi';
 import { Status } from '../createTaskForm/enums/Status';
 import { IUpdateTask } from '../createTaskForm/interfaces/IUpdateTask';
 import { countTasks } from './helpers/countTasks';
+import { TaskStatusChangedContext } from '../../context/TaskStatusChangedContext/TaskStatusChangedContext';
 
 export const TaskArea: FC = (): ReactElement => {
+  const tasksUpdatedContext = useContext(
+    TaskStatusChangedContext,
+  )
 
   const { error, isPending, data, refetch } = useQuery({
     queryKey: ['tasks'], 
@@ -35,6 +39,15 @@ export const TaskArea: FC = (): ReactElement => {
       },
     });
 
+    useEffect(() => {
+        refetch();
+    }, [tasksUpdatedContext.updated]);
+
+    useEffect(() => {
+      if (updateTaskMutation.isSuccess) {
+        tasksUpdatedContext.toggle();
+      }
+    }, [updateTaskMutation.isSuccess])
 
     function onStatusChangeHandler(
       e: React.ChangeEvent<HTMLInputElement>,

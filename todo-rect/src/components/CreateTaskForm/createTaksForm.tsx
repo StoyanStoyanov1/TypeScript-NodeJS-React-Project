@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState, useEffect } from "react";
+import React, { FC, ReactElement, useState, useEffect, useContext } from "react";
 import {
     Box, 
     Typography, 
@@ -19,6 +19,7 @@ import { Priority } from "./enums/Prioritiy";
 import dayjs from "dayjs";
 import { sendApiRequest } from "../../helpers/sendApiRequest";
 import { ICreateTask } from "../taskArea/interfaces/ICreateTask";
+import { TaskStatusChangedContext } from "../../context/TaskStatusChangedContext/TaskStatusChangedContext";
 
 
 export const CreateTaskForm: FC = (): ReactElement => {
@@ -32,6 +33,10 @@ export const CreateTaskForm: FC = (): ReactElement => {
     const [status, setStatus] = useState<string>(Status.todo);
     const [priority, setPriority] = useState<string>(Priority.normal);
     const [showSucces, setShowSucces] = useState<boolean>(false);
+
+    const tasksUpdatedContext = useContext(
+        TaskStatusChangedContext,
+    )
 
     const createTaskMutation = useMutation({
         mutationFn: async (data: ICreateTask) => {
@@ -61,6 +66,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
     useEffect(() => {
         if (createTaskMutation.isSuccess) {
             setShowSucces(true);
+            tasksUpdatedContext.toggle();
         }
 
         const successTimeout = setTimeout(() => {
